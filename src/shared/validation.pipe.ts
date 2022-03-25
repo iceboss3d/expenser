@@ -12,7 +12,7 @@ import { ApiResponse } from 'src/helpers/apiResponse';
 export class ValidationPipe implements PipeTransform<any> {
   async transform(value: any, metadata: ArgumentMetadata) {
     if (value instanceof Object && this.isEmpty(value)) {
-      return ApiResponse.fail('Validation Error: Empty Body Object', HttpStatus.BAD_REQUEST);
+      throw ApiResponse.fail('Validation Error: Empty Body Object', HttpStatus.BAD_REQUEST);
     }
 
     const { metatype } = metadata;
@@ -22,7 +22,7 @@ export class ValidationPipe implements PipeTransform<any> {
     const object = plainToClass(metatype, value);
     const errors = await validate(object);
     if (errors.length > 0) {
-      return ApiResponse.fail(
+      throw ApiResponse.fail(
         `Validation Error: ${this.formatErrors(errors)}`,
         HttpStatus.BAD_REQUEST,
       );
