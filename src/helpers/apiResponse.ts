@@ -22,21 +22,21 @@ class ApiResponse<Type> {
     message: string,
     statusCode: number = HttpStatus.OK,
     data?: Type,
-  ): GenericResponse<Type> {
+  ): IGenericResponse<Type> {
     return new ApiResponse(message, true, statusCode, data);
   }
 
   public static fail<Type>(
     message: string,
     statusCode: number = HttpStatus.NOT_FOUND,
-  ): GenericResponse<Type> {
+  ): IGenericResponse<Type> {
     return new ApiResponse(message, false, statusCode);
   }
 }
 
 export { ApiResponse };
 
-export interface GenericResponse<Type> {
+export interface IGenericResponse<Type> {
   statusCode: number;
   status: boolean;
   message: string;

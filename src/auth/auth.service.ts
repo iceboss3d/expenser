@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { ApiResponse, GenericResponse } from 'src/helpers/apiResponse';
+import { ApiResponse, IGenericResponse } from 'src/helpers/apiResponse';
 import { UserRequestDto, UserResponseDto } from 'src/user/dto/user.dto';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcryptjs';
@@ -11,7 +11,7 @@ export class AuthService {
 
   async register(
     data: UserRequestDto,
-  ): Promise<GenericResponse<UserResponseDto>> {
+  ): Promise<IGenericResponse<UserResponseDto>> {
     try {
       const user = await this.userService.createUser(data);
       return ApiResponse.success<UserResponseDto>(

@@ -3,10 +3,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
+import { ExpenseEntity } from 'src/expense/expense.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -24,6 +26,9 @@ export class UserEntity {
 
   @Column({ name: 'password', nullable: false })
   password: string;
+
+  @OneToMany(() => ExpenseEntity, expense => expense.user)
+  expenses: ExpenseEntity[];
 
   @BeforeInsert()
   async hashPassword() {
