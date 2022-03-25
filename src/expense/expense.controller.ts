@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Post, Query, Res, UseGuards, UsePipes } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Res,
+  UseGuards,
+  UsePipes,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { AuthGuard } from 'src/shared/auth.guard';
 import { ValidationPipe } from 'src/shared/validation.pipe';
@@ -57,9 +67,20 @@ export class ExpenseController {
     @User('username') username: string,
     @Res() response: Response,
   ) {
-    const result = await this.expenseService.getExpenses(
-      username
-    );
+    const result = await this.expenseService.getExpenses(username);
+    response.status(result.statusCode).send(result);
+  }
+
+  @Put(':id')
+  @UseGuards(new AuthGuard())
+  @UsePipes(new ValidationPipe())
+  async editExpense(
+    @User('username') username: string,
+    @Param('id') id: string,
+    @Body() data: ExpenseRequestDto,
+    @Res() response: Response,
+  ) {
+    const result = await this.expenseService.editExpense(username, id, data);
     response.status(result.statusCode).send(result);
   }
 }

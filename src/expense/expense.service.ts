@@ -2,7 +2,7 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ApiResponse, IGenericResponse } from 'src/helpers/apiResponse';
 import { UserService } from 'src/user/user.service';
-import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { ExpenseRequestDto, ExpenseResponseDto } from './dtos/expense.dto';
 import { ExpenseEntity, TCategory } from './expense.entity';
 
@@ -80,5 +80,20 @@ export class ExpenseService {
       res.push(expense.toResponseObject());
     });
     return ApiResponse.success('Expenses fetched', HttpStatus.OK, res);
+  }
+
+  async editExpense(
+    username: string,
+    expenseId: string,
+    data: ExpenseRequestDto,
+  ): Promise<IGenericResponse<string>> {
+    const expense = await this.expensesRepository.findOne({
+      where: { id: expenseId, user: { username } },
+    });
+    if (!expense) {
+      return ApiResponse.fail<string>('Expense not found');
+    }
+    await this.expensesRepository.update({ id: expenseId }, data);
+    return ApiResponse.success<string>('Expense updated');
   }
 }
