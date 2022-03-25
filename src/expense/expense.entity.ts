@@ -23,7 +23,7 @@ export class ExpenseEntity {
   @Column({ name: 'description', nullable: false })
   description: string;
 
-  @Column('numeric', {
+  @Column('decimal', {
     name: 'amount',
     nullable: false,
     precision: 10,
@@ -37,6 +37,12 @@ export class ExpenseEntity {
   @ManyToOne(() => UserEntity, (user) => user.expenses)
   @JoinColumn()
   user: UserEntity;
+
+  toResponseObject() {
+    const { id, amount, category, description, createdAt, updatedAt } = this;
+
+    return { id, amount, category, description, createdAt, updatedAt };
+  }
 }
 
 export type TCategory =
