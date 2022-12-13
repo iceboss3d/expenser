@@ -24,6 +24,20 @@ export class Paystack {
       },
     );
 
-    response.data;
+    return response.data;
+  }
+
+  async verifyTransaction(reference: string) {
+    const response = await axios.get(
+      `${this.API_URL}/transaction/verify/${reference}`,
+      {
+        headers: {
+          Authorization: `Bearer ${this.API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    return response.data;
   }
 }
