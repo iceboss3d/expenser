@@ -19,7 +19,7 @@ export class AuthController {
   @Post('login')
   @UsePipes(new ValidationPipe())
   async login(@Body() data: UserRequestDto, @Res() response: Response) {
-    const result = await this.authService.login(data)
+    const result = await this.authService.login(data);
     response.status(result.statusCode).send(result);
     return;
   }
